@@ -1,0 +1,9 @@
+show_grid_cell:
+  pattern: /grid/:scale/cell/:x/:y/:w/:h
+  defaults: { _bundle: ImageGridBundle, _controller: Default, _action: show }
+  requirements: { scale: '[\d\.]+', x: '[\d]+', y: '[\d]+', w: '[\d]+', h: '[\d]+' }
+
+navigator:
+  pattern: /grid/navigator
+  defaults: { _bundle: ImageGridBundle, _controller: Default, _action: index }
+

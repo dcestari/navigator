@@ -1,0 +1,7 @@
+homepage:
+  pattern: /
+  defaults: { _bundle: WebBundle, _controller: Default, _action: index }
+
+image_grid:
+  prefix: /image
+  resource: ImageGridBundle/Resources/config/routing.yml

@@ -1,0 +1,9 @@
+navigator/cache/*
+!navigator/cache/.symfony
+navigator/logs/*
+!navigator/logs/.symfony
+web/cache/*
+!web/cache/.symfony
+web/bundles/*
+!web/bundles/.symfony
+
