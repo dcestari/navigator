@@ -7,3 +7,4 @@ web/cache/*
 web/bundles/*
 !web/bundles/.symfony
 
+vendor/symfony

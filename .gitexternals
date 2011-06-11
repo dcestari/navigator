@@ -1,0 +1,3 @@
+[external "vendor/symfony"]
+	path = vendor/symfony
+	url = git://github.com/dcestari/symfony.git
