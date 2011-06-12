@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href="{{ asset('bundles/applicationimagegrid/css/ui-lightness/jquery-ui.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('bundles/applicationimagegrid/css/main.css') }}" type="text/css" rel="stylesheet" />
+    <script src="{{ asset('bundles/applicationimagegrid/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/applicationimagegrid/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/applicationimagegrid/js/navigator.js') }}"></script>
+    <title>
+      {% block title %}Medical Images Navigator{% endblock %}
+    </title>
+  </head>
+  <body>
+    <div id="canvas">
+      <div id="content">
+        {% block body %}{% endblock %}
+      </div>
+      <div id="sidebar">
+        {% block sidebar %}{% endblock %}
+      </div>
+    </div>
+  </body>
+</html>
+

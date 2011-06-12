@@ -1,0 +1,35 @@
+{% extends 'ApplicationImageGridBundle::layout.html.twig' %}
+
+{% block sidebar %}
+  <button id="move-up">go up</button>
+  <button id="move-left">go left</button>
+  <button id="move-right">go right</button>
+  <button id="move-down">go down</button>
+  <button id="reload">reload</button>
+  <div id="zoom"></div>
+{% endblock %}
+
+{% block body %}
+
+<div id="data">
+  <span id="uri">{{ path('navigator') }}</span>
+  <span id="scale">{{ scale }}</span>
+  <span id="x-offset">{{ x_offset }}</span>
+  <span id="y-offset">{{ y_offset }}</span>
+</div>
+
+<table cellpadding="0" cellspacing="0">
+{% for y in range(y_offset, y_limit) %}
+  <tr>
+  {% for x in range(x_offset, x_limit) %}
+    <td>
+      <img width="100" height="100"
+        src="{{ path('show_grid_cell', { 'scale': scale, 'x': x, 'y': y, 'w': 100, 'h': 100 }) }}" alt="{{ x }},{{ y }}" />
+    </td>
+  {% endfor %}
+  </tr>
+{% endfor %}
+</table>
+
+{% endblock %}
+
