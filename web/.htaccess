@@ -1,6 +1,5 @@
 <IfModule mod_xsendfile.c>
   XSendFile On
-  XSendFileAllowAbove On
 </IfModule>
 
 <IfModule mod_rewrite.c>
