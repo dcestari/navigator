@@ -9,7 +9,7 @@ $loader->registerNamespaces(array(
     'Doctrine\\DBAL'   => __DIR__.'/../vendor/symfony/vendor/doctrine-dbal/lib',
     'Doctrine'         => __DIR__.'/../vendor/symfony/vendor/doctrine/lib',
     'Monolog'          => __DIR__.'/../vendor/symfony/vendor/monolog/src',
-    'Assetic'          => __DIR__.'/../vendor/symfony/vendor/assetic/src',
+    'Assetic'          => __DIR__.'/../vendor/assetic/src',
     'Metadata'         => __DIR__.'/../vendor/symfony/vendor/metadata/src',
 ));
 $loader->registerPrefixes(array(

@@ -1,3 +1,9 @@
 [external "vendor/symfony"]
 	path = vendor/symfony
 	url = git://github.com/dcestari/symfony.git
+[external "vendor/bundles/Symfony/Bundle/AsseticBundle"]
+	path = vendor/bundles/Symfony/Bundle/AsseticBundle
+	url = git://github.com/symfony/AsseticBundle.git
+[external "vendor/assetic"]
+	path = vendor/assetic
+	url = git://github.com/kriswallsmith/assetic.git

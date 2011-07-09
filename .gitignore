@@ -8,3 +8,5 @@ web/bundles/*
 !web/bundles/.symfony
 
 vendor/symfony
+vendor/bundles/Symfony/Bundle/AsseticBundle
+vendor/assetic
