@@ -7,9 +7,27 @@ width: 200px;
 float: left;
        background-color: gray;
 }
+#move {
+  overflow: hidden;
+}
 #zoom {
-height: 200px;
-float: right;
+height: 80px;
+position: relative;
+margin: 10px auto 0px;
+}
+#zoom-in {
+  position: absolute;
+  top: 0;
+}
+#zoom-out {
+  position: absolute;
+  bottom: 0;
+}
+.control {
+  background-color: white;
+  color: blue;
+  padding: 2px;
+  margin: 2px;
 }
 #move-up {
   margin-left: 30px;

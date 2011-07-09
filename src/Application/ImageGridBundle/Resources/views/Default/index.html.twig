@@ -1,12 +1,16 @@
 {% extends 'ApplicationImageGridBundle::layout.html.twig' %}
 
 {% block sidebar %}
-  <button id="move-up">go up</button>
-  <button id="move-left">go left</button>
-  <button id="move-right">go right</button>
-  <button id="move-down">go down</button>
-  <button id="reload">reload</button>
-  <div id="zoom"></div>
+  <div id="move">
+    <a class="control" href="{{ path('navigator', { 'scale': scale, 'x': x_offset, 'y': y_offset - 1 }) }}" id="move-up">go up</a>
+    <a class="control" href="{{ path('navigator', { 'scale': scale, 'x': x_offset - 1, 'y': y_offset }) }}" id="move-left">go left</a>
+    <a class="control" href="{{ path('navigator', { 'scale': scale, 'x': x_offset + 1, 'y': y_offset }) }}" id="move-right">go right</a>
+    <a class="control" href="{{ path('navigator', { 'scale': scale, 'x': x_offset, 'y': y_offset + 1 }) }}" id="move-down">go down</a>
+  </div>
+  <div id="zoom">
+    <a class="control" href="{{ path('navigator', { 'scale':scale - 0.1, 'x': x_offset, 'y': y_offset }) }}" id="zoom-out">zoom out</a>
+    <a class="control" href="{{ path('navigator', { 'scale':scale + 0.1, 'x': x_offset, 'y': y_offset }) }}" id="zoom-in">zoom in</a>
+  </div>
 {% endblock %}
 
 {% block body %}
