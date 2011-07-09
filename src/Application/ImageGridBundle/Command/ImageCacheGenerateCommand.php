@@ -13,6 +13,7 @@ class ImageCacheGenerateCommand extends Command
   {
     $this
       ->setDefinition(array(
+        new InputArgument('scale', InputArgument::REQUIRED, 'The scale to generate'),
         new InputArgument('source', InputArgument::REQUIRED, 'The source image'),
         new InputArgument('target', InputArgument::REQUIRED, 'The target directory'),
       ))
@@ -22,12 +23,13 @@ class ImageCacheGenerateCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $scale = 0.4;
     $w = 100;
     $h = 100;
+    $scale = $input->getArgument('scale');
     $source = $input->getArgument('source');
     $target = $input->getArgument('target');
 
+    $output->writeln(sprintf('<info>scale</info> %s', $scale));
     $output->writeln(sprintf('<info>source</info> %s', $source));
     $output->writeln(sprintf('<info>target</info> %s', $target));
 
