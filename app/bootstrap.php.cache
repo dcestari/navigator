@@ -434,7 +434,7 @@ abstract class Bundle extends ContainerAware implements BundleInterface
                     throw new \LogicException(sprintf(
                         'The extension alias for the default extension of a '.
                         'bundle must be the underscored version of the '.
-                        'bundle name ("%s" vs "%s")',
+                        'bundle name ("%s" instead of "%s")',
                         $expectedAlias, $extension->getAlias()
                     ));
                 }
@@ -816,7 +816,6 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\IniFileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
@@ -846,7 +845,7 @@ abstract class Kernel implements KernelInterface
     protected $startTime;
     protected $classes;
 
-    const VERSION = '2.0.0-RC5-DEV';
+    const VERSION = '2.0.0';
 
     
     public function __construct($environment, $debug)
@@ -1068,18 +1067,15 @@ abstract class Kernel implements KernelInterface
     
     public function loadClassCache($name = 'classes', $extension = '.php')
     {
-        if (!$this->booted) {
-            $this->boot();
-        }
-
-        if ($this->classes) {
-            ClassCollectionLoader::load($this->classes, $this->getCacheDir(), $name, $this->debug, true, $extension);
+        if (!$this->booted && file_exists($this->getCacheDir().'/classes.map')) {
+            ClassCollectionLoader::load(include($this->getCacheDir().'/classes.map'), $this->getCacheDir(), $name, $this->debug, false, $extension);
         }
     }
 
-    public function addClassesToCache(array $classes)
+    
+    public function setClassCache(array $classes)
     {
-        $this->classes = array_unique(array_merge($this->classes, $classes));
+        file_put_contents($this->getCacheDir().'/classes.map', sprintf('<?php return %s;', var_export($classes, true)));
     }
 
     
@@ -1259,8 +1255,6 @@ abstract class Kernel implements KernelInterface
 
         $container->addCompilerPass(new AddClassesToCachePass($this));
         $container->compile();
-
-        $this->addClassesToCache($container->getParameter('kernel.compiled_classes'));
 
         return $container;
     }
@@ -1588,6 +1582,11 @@ class ServerBag extends ParameterBag
             }
         }
 
+                if (isset($this->parameters['PHP_AUTH_USER'])) {
+            $pass = isset($this->parameters['PHP_AUTH_PW']) ? $this->parameters['PHP_AUTH_PW'] : '';
+            $headers['AUTHORIZATION'] = 'Basic '.base64_encode($this->parameters['PHP_AUTH_USER'].':'.$pass);
+        }
+
         return $headers;
     }
 }
@@ -1603,14 +1602,12 @@ namespace Symfony\Component\HttpFoundation
 class HeaderBag
 {
     protected $headers;
-    protected $cookies;
     protected $cacheControl;
 
     
     public function __construct(array $headers = array())
     {
         $this->cacheControl = array();
-        $this->cookies = array();
         $this->headers = array();
         foreach ($headers as $key => $values) {
             $this->set($key, $values);
@@ -1727,40 +1724,6 @@ class HeaderBag
         if ('cache-control' === $key) {
             $this->cacheControl = array();
         }
-    }
-
-    
-    public function setCookie(Cookie $cookie)
-    {
-        $this->cookies[$cookie->getName()] = $cookie;
-    }
-
-    
-    public function removeCookie($name)
-    {
-        unset($this->cookies[$name]);
-    }
-
-    
-    public function hasCookie($name)
-    {
-        return isset($this->cookies[$name]);
-    }
-
-    
-    public function getCookie($name)
-    {
-        if (!$this->hasCookie($name)) {
-            throw new \InvalidArgumentException(sprintf('There is no cookie with name "%s".', $name));
-        }
-
-        return $this->cookies[$name];
-    }
-
-    
-    public function getCookies()
-    {
-        return $this->cookies;
     }
 
     
@@ -1960,6 +1923,10 @@ class Request
         if (isset($components['port'])) {
             $defaults['SERVER_PORT'] = $components['port'];
             $defaults['HTTP_HOST'] = $defaults['HTTP_HOST'].':'.$components['port'];
+        }
+
+        if (!isset($components['path'])) {
+            $components['path'] = '';
         }
 
         if (in_array(strtoupper($method), array('POST', 'PUT', 'DELETE'))) {
@@ -2337,6 +2304,7 @@ class Request
         return $this->format;
     }
 
+    
     public function setRequestFormat($format)
     {
         $this->format = $format;
@@ -2678,8 +2646,6 @@ class ClassCollectionLoader
 
         self::$loaded[$name] = true;
 
-        $classes = array_unique($classes);
-
         if ($adaptive) {
                         $classes = array_diff($classes, get_declared_classes(), get_declared_interfaces());
 
@@ -2979,14 +2945,14 @@ namespace Symfony\Component\ClassLoader
 {
 
 
-class MapFileClassLoader
+class MapClassLoader
 {
     private $map = array();
 
     
-    public function __construct($file)
+    public function __construct(array $map)
     {
-        $this->map = require $file;
+        $this->map = $map;
     }
 
     
